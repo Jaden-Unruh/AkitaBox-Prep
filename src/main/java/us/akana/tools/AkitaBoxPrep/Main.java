@@ -103,9 +103,9 @@ public class Main {
 
 	/**
 	 * Pulls the temporary inventory id from each row of sheet two of
-	 * {@link Main#caBook}, finds that id within {@link Main#aspxBook} and pulls the maximo
-	 * id from that row of {@link Main#aspxBook}. Copies the maximo id back to column
-	 * one of sheet 2 of {@link Main#caBook}. Writes comments to sheet 2 of
+	 * {@link Main#caBook}, finds that id within {@link Main#aspxBook} and pulls the
+	 * maximo id from that row of {@link Main#aspxBook}. Copies the maximo id back
+	 * to column 3 of sheet 2 of {@link Main#caBook}. Writes comments to sheet 2 of
 	 * {@link Main#caBook} if anything out of the ordinary happens.
 	 */
 	static void crossReferenceAssetNums() {
@@ -117,14 +117,16 @@ public class Main {
 			if (tempAssetId.endsWith("NEW")) { //$NON-NLS-1$
 				String assetId = tempAssetId.substring(0, tempAssetId.length() - 3);
 				String maximoId = findMaximoId(assetId);
-				String oldVal = FORMATTER.formatCellValue(activeRow.getCell(0));
+				String oldVal = FORMATTER.formatCellValue(activeRow.getCell(2));
 				if (!oldVal.equals(maximoId)) {
 					if (oldVal.length() == 0)
-						activeRow.getCell(0).setCellValue(maximoId);
-					else {
-						writeComment(caBook, caSheet, i, 0,
-								String.format(Messages.getString("Main.Comment.InvalidMaximo"), maximoId, oldVal));
-					}
+						activeRow.getCell(2).setCellValue(maximoId);
+					else if (maximoId.equals(Messages.getString("Main.Warn.AssetNotFound"))) //$NON-NLS-1$
+						writeComment(caBook, caSheet, i, 2,
+								String.format(Messages.getString("Main.Comment.AssetNotFound"), maximoId)); //$NON-NLS-1$
+					else
+						writeComment(caBook, caSheet, i, 2,
+								String.format(Messages.getString("Main.Comment.InvalidMaximo"), maximoId, oldVal)); //$NON-NLS-1$
 				}
 			} else {
 				// Write comment to tell user that items in column 2 of the CA file should end
@@ -187,8 +189,8 @@ public class Main {
 	}
 
 	/**
-	 * Loads {@link Main#aspxBook} and {@link Main#caBook} from their respective files -
-	 * moving them to memory and making them readable in java
+	 * Loads {@link Main#aspxBook} and {@link Main#caBook} from their respective
+	 * files - moving them to memory and making them readable in java
 	 * 
 	 * @throws IOException if reading data from the inputstream of either file fails
 	 */
@@ -212,12 +214,12 @@ public class Main {
 	 * Adds contents to and opens {@link Main#options}
 	 */
 	private static void openWindow() {
-		options = new JFrame(Messages.getString("Main.Window.Title"));
+		options = new JFrame(Messages.getString("Main.Window.Title")); //$NON-NLS-1$
 		options.setSize(800, 700);
 		options.setLayout(new GridBagLayout());
 		options.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		options.add(new JLabel(Messages.getString("Main.Window.ASPxPrompt")),
+		options.add(new JLabel(Messages.getString("Main.Window.ASPxPrompt")), //$NON-NLS-1$
 				new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, 0, new Insets(0, 0, 0, 0), 0, 0));
 
 		JButton selectASPx = new SelectButton(0);
@@ -304,8 +306,8 @@ public class Main {
 	}
 
 	/**
-	 * Saves {@link Main#caBook} with its updated content - copying from memory back to
-	 * the disk
+	 * Saves {@link Main#caBook} with its updated content - copying from memory back
+	 * to the disk
 	 * 
 	 * @throws FileNotFoundException if the user deleted the file between the time
 	 *                               they selected it and its now being saved
