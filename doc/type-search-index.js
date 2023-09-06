@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"us.akana.tools.AkitaBoxPrep","l":"InfoText"},{"p":"us.akana.tools.AkitaBoxPrep","l":"Main"},{"p":"us.akana.tools.AkitaBoxPrep","l":"Messages"},{"p":"us.akana.tools.AkitaBoxPrep","l":"SelectButton"}]
